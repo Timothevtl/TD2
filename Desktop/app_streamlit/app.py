@@ -85,15 +85,17 @@ def analyze_movie_reviews(reviews):
 # Define the Streamlit app
 def main():
     st.title("Movie Review Sentiment Analysis")
-
-    # Button to analyze a random review
-    if st.button("Analyze Random Review"):
-        sentiment, selected_review = select_random_review()
-        st.subheader("Review:")
-        st.write(selected_review)
-        st.subheader("Classification:")
-        classification = classify_review(selected_review)
-        st.write(classification)
+    try:
+    	# Button to analyze a random review
+    	if st.button("Analyze Random Review"):
+        	sentiment, selected_review = select_random_review()
+        	st.subheader("Review:")
+        	st.write(selected_review)
+        	st.subheader("Classification:")
+        	classification = classify_review(selected_review)
+        	st.write(classification)
+    except Exception:
+	return "An error occured, try another option"
 
 if __name__ == "__main__":
     main()
