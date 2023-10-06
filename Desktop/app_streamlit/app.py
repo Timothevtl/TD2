@@ -11,7 +11,6 @@ nltk.download('sentiwordnet')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('wordnet')
 
-user_input = st.text_area("Enter your movie review here:")
 
 # List all the files in the positive and negative directories
 def file_declaration(): 
@@ -83,13 +82,14 @@ def analyze_movie_reviews(reviews):
 # Define the Streamlit app
 def main():
     st.title("Movie Review Sentiment Analysis")
+    user_input = st.text_area("Enter your movie review here:")
     # Button to analyze a random review
     if st.button("Analyze"):
         if user_input:
             sentiment = classify_review(user_input)
-            if sentiment == "positive":
+            if sentiment == "Positive":
                 st.write("Sentiment: Positive")
-            elif sentiment == "negative":
+            elif sentiment == "Negative":
                 st.write("Sentiment: Negative")
             else:
                 st.write("Sentiment: Neutral")
