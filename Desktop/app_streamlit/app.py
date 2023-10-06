@@ -34,11 +34,12 @@ def get_sentiment_scores(adverb):
         return 0.0, 0.0, 1.0 
 
 # Function to classify a review
-def classify_review(review):
+def classify_review_with_score(review, positive_threshold=0.1, negative_threshold=0.1):
     tokens = word_tokenize(review)
     tagged_sentence = pos_tag(tokens)
     adverbs = identify_adverbs(tagged_sentence)
     total_pos, total_neg, total_obj = 0.0, 0.0, 0.0
+    word_contributions = {}  # Dictionary to store word contributions
 
     for adverb in adverbs:
         pos_score, neg_score, obj_score = get_sentiment_scores(adverb)
@@ -46,14 +47,19 @@ def classify_review(review):
         total_neg += neg_score
         total_obj += obj_score
 
-    # Define a threshold to classify as positive, negative, or neutral
-    threshold = 0.1
-    if total_pos > total_neg + threshold:
-        return "Positive"
-    elif total_neg > total_pos + threshold:
-        return "Negative"
+        # Store word contribution in the dictionary
+        word_contributions[adverb] = (pos_score, neg_score, obj_score)
+
+    # Adjust the thresholds for positive and negative classifications
+    if total_pos > total_neg + positive_threshold:
+        sentiment = "Positive"
+    elif total_neg > total_pos + negative_threshold:
+        sentiment = "Negative"
     else:
-        return "Neutral"
+        sentiment = "Neutral"
+
+    return sentiment, total_pos, total_neg, total_obj, word_contributions
+
         
 def analyze_movie_reviews(reviews):
     for review in reviews:
@@ -69,15 +75,25 @@ def main():
     # Button to analyze a random review
     if st.button("Analyze"):
         if user_input:
-            sentiment = classify_review(user_input)
-            if sentiment == "Positive":
+            sentiment, total_pos, total_neg, total_obj, word_contributions = classify_review_with_score(user_input, positive_threshold, negative_threshold)
+            if sentiment == "positive":
                 st.write("Sentiment: Positive")
-            elif sentiment == "Negative":
+            elif sentiment == "negative":
                 st.write("Sentiment: Negative")
             else:
                 st.write("Sentiment: Neutral")
+    
+            st.write(f"Total Positive Score: {total_pos}")
+            st.write(f"Total Negative Score: {total_neg}")
+            st.write(f"Total Objectivity Score: {total_obj}")
+    
+            # Display word contributions
+            st.write("Word Contributions:")
+            for word, (pos_score, neg_score, obj_score) in word_contributions.items():
+                st.write(f"{word}: Positive={pos_score}, Negative={neg_score}, Objectivity={obj_score}")
         else:
             st.write("Please enter a movie review.")
+
 
 if __name__ == "__main__":
     try:
