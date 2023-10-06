@@ -75,7 +75,7 @@ def main():
     # Button to analyze a random review
     if st.button("Analyze"):
         if user_input:
-            sentiment, total_pos, total_neg, total_obj, word_contributions = classify_review_with_score(user_input, positive_threshold, negative_threshold)
+            sentiment, total_pos, total_neg, total_obj, word_contributions = classify_review_with_score(user_input, positive_threshold=0.1, negative_threshold=0.1)
             if sentiment == "positive":
                 st.write("Sentiment: Positive")
             elif sentiment == "negative":
