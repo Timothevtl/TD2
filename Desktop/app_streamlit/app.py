@@ -16,8 +16,10 @@ positive_dir = "C:/Users/timot/Desktop/Cours Esilv/S9$/txt_sentoken/pos"
 negative_dir = "C:/Users/timot/Desktop/Cours Esilv/S9$/txt_sentoken/neg"
 
 # List all the files in the positive and negative directories
-positive_files = [os.path.join(positive_dir, filename) for filename in os.listdir(positive_dir)]
-negative_files = [os.path.join(negative_dir, filename) for filename in os.listdir(negative_dir)]
+def file_declaration(): 
+    positive_files = [os.path.join(positive_dir, filename) for filename in os.listdir(positive_dir)]
+    negative_files = [os.path.join(negative_dir, filename) for filename in os.listdir(negative_dir)]
+    return positive_files, negative_files
 
 def identify_adverbs(tagged_sentence):
     adverbs = [word for word, tag in tagged_sentence if tag.startswith('RB')]
@@ -25,6 +27,10 @@ def identify_adverbs(tagged_sentence):
 
 # Function to randomly select a review from either positive or negative
 def select_random_review():
+    try:
+        positive_files, negative_files = file_declaration()
+    except Exception :
+        return "The files you're looking to analyse the reviews from are missing"
     is_positive = random.choice([True, False])  # Randomly choose positive or negative
     if is_positive:
         review_file = random.choice(positive_files)
