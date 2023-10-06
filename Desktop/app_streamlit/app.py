@@ -39,7 +39,7 @@ def classify_review(review):
         total_neg += neg_score
 
     # Define a threshold to classify as good or bad
-    threshold = 0.2  # Adjust as needed
+    threshold = 0.1
     if total_pos > total_neg + threshold:
         return "Good"
     else:
