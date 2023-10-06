@@ -37,14 +37,15 @@ def get_sentiment_scores(adverb):
 def classify_review(review):
     tokens = word_tokenize(review)
     tagged_sentence = pos_tag(tokens)
-    adverbs = identify_adverbs(tagged_sentence)
+    
     total_pos, total_neg, total_obj = 0.0, 0.0, 0.0
 
-    for adverb in adverbs:
-        pos_score, neg_score, obj_score = get_sentiment_scores(adverb)
-        total_pos += pos_score
-        total_neg += neg_score
-        total_obj += obj_score
+    for word, tag in tagged_sentence:
+        if tag.startswith('RB') or tag.startswith('JJ') or tag.startswith('VB'):
+            pos_score, neg_score, obj_score = get_sentiment_scores(word)
+            total_pos += pos_score
+            total_neg += neg_score
+            total_obj += obj_score
 
     # Define a threshold to classify as positive, negative, or neutral
     threshold = 0.1
@@ -54,8 +55,7 @@ def classify_review(review):
         return "Negative"
     else:
         return "Neutral"
-
-
+        
 def analyze_movie_reviews(reviews):
     for review in reviews:
         classification = classify_review(review)
