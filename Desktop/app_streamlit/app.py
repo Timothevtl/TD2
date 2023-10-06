@@ -11,10 +11,6 @@ nltk.download('sentiwordnet')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('wordnet')
 
-# Define the paths to the positive and negative review directories
-positive_dir = "C:/Users/timot/Desktop/Cours Esilv/S9$/txt_sentoken/pos"
-negative_dir = "C:/Users/timot/Desktop/Cours Esilv/S9$/txt_sentoken/neg"
-
 user_input = st.text_area("Enter your movie review here:")
 
 # List all the files in the positive and negative directories
