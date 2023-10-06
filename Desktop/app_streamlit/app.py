@@ -11,13 +11,6 @@ nltk.download('sentiwordnet')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('wordnet')
 
-
-# List all the files in the positive and negative directories
-def file_declaration(): 
-    positive_files = [os.path.join(positive_dir, filename) for filename in os.listdir(positive_dir)]
-    negative_files = [os.path.join(negative_dir, filename) for filename in os.listdir(negative_dir)]
-    return positive_files, negative_files
-
 def identify_adverbs(tagged_sentence):
     adverbs = [word for word, tag in tagged_sentence if tag.startswith('RB')]
     return adverbs
