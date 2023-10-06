@@ -22,23 +22,6 @@ def identify_adverbs(tagged_sentence):
     adverbs = [word for word, tag in tagged_sentence if tag.startswith('RB')]
     return adverbs
 
-# Function to randomly select a review from either positive or negative
-def select_random_review():
-    try:
-        positive_files, negative_files = file_declaration()
-    except Exception :
-        return "The files you're looking to analyse the reviews from are missing"
-    is_positive = random.choice([True, False])  # Randomly choose positive or negative
-    if is_positive:
-        review_file = random.choice(positive_files)
-        sentiment = "Positive"
-    else:
-        review_file = random.choice(negative_files)
-        sentiment = "Negative"
-    with open(review_file, 'r') as file:
-        selected_review = file.read()
-    return sentiment, selected_review
-
 # Function to get sentiment scores for a word
 def get_sentiment_scores(adverb):
     synsets = list(swn.senti_synsets(adverb))
@@ -51,22 +34,24 @@ def get_sentiment_scores(adverb):
         return 0.0, 0.0, 1.0 
 
 # Function to classify a review
-def classify_review(review, positive_threshold=0.1, negative_threshold=0.1):
+def classify_review(review):
     tokens = word_tokenize(review)
     tagged_sentence = pos_tag(tokens)
-    adverbs = identify_adverbs(tagged_sentence)
+    
     total_pos, total_neg, total_obj = 0.0, 0.0, 0.0
 
-    for adverb in adverbs:
-        pos_score, neg_score, obj_score = get_sentiment_scores(adverb)
-        total_pos += pos_score
-        total_neg += neg_score
-        total_obj += obj_score
+    for word, tag in tagged_sentence:
+        if tag.startswith('RB') or tag.startswith('JJ') or tag.startswith('VB'):
+            pos_score, neg_score, obj_score = get_sentiment_scores(word)
+            total_pos += pos_score
+            total_neg += neg_score
+            total_obj += obj_score
 
-    # Adjust the thresholds for positive and negative classifications
-    if total_pos > total_neg + positive_threshold:
+    # Define a threshold to classify as positive, negative, or neutral
+    threshold = 0.1
+    if total_pos > total_neg + threshold:
         return "Positive"
-    elif total_neg > total_pos + negative_threshold:
+    elif total_neg > total_pos + threshold:
         return "Negative"
     else:
         return "Neutral"
