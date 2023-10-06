@@ -52,7 +52,7 @@ def get_sentiment_scores(adverb):
         return 0.0, 0.0, 1.0 
 
 # Function to classify a review
-def classify_review(review):
+def classify_review(review, positive_threshold=0.1, negative_threshold=0.1):
     tokens = word_tokenize(review)
     tagged_sentence = pos_tag(tokens)
     adverbs = identify_adverbs(tagged_sentence)
@@ -64,14 +64,14 @@ def classify_review(review):
         total_neg += neg_score
         total_obj += obj_score
 
-    # Define a threshold to classify as positive, negative, or neutral
-    threshold = 0.1
-    if total_pos > total_neg + threshold:
+    # Adjust the thresholds for positive and negative classifications
+    if total_pos > total_neg + positive_threshold:
         return "Positive"
-    elif total_neg > total_pos + threshold:
+    elif total_neg > total_pos + negative_threshold:
         return "Negative"
     else:
         return "Neutral"
+
 
 def analyze_movie_reviews(reviews):
     for review in reviews:
