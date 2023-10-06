@@ -98,4 +98,4 @@ if __name__ == "__main__":
     try:
         main()
     except Exception:
-        return "An error occured, try another option"
+        print("An error occured, try another option")
