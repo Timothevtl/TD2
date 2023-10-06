@@ -68,12 +68,12 @@ def main():
     if st.button("Analyze"):
         if user_input:
             sentiment = classify_review(user_input)
-            if sentiment == "positive":
-                st.write("Sentiment: Positive")
-            elif sentiment == "negative":
-                st.write("Sentiment: Negative")
+            if sentiment == "Good":
+                st.write("Sentiment: Good")
+            elif sentiment == "Bad":
+                st.write("Sentiment: Bad")
             else:
-                st.write("Sentiment: Neutral")
+                st.write("Sentiment: Hard to say... either good or bad")
         else:
             st.write("Please enter a movie review.")
 
