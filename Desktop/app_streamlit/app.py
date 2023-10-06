@@ -15,6 +15,8 @@ nltk.download('wordnet')
 positive_dir = "C:/Users/timot/Desktop/Cours Esilv/S9$/txt_sentoken/pos"
 negative_dir = "C:/Users/timot/Desktop/Cours Esilv/S9$/txt_sentoken/neg"
 
+user_input = st.text_area("Enter your movie review here:")
+
 # List all the files in the positive and negative directories
 def file_declaration(): 
     positive_files = [os.path.join(positive_dir, filename) for filename in os.listdir(positive_dir)]
@@ -86,13 +88,17 @@ def analyze_movie_reviews(reviews):
 def main():
     st.title("Movie Review Sentiment Analysis")
     # Button to analyze a random review
-    if st.button("Analyze Random Review"):
-        sentiment, selected_review = select_random_review()
-        st.subheader("Review:")
-        st.write(selected_review)
-        st.subheader("Classification:")
-        classification = classify_review(selected_review)
-        st.write(classification)
+    if st.button("Analyze"):
+        if user_input:
+            sentiment = classify_review(user_input)
+            if sentiment == "positive":
+                st.write("Sentiment: Positive")
+            elif sentiment == "negative":
+                st.write("Sentiment: Negative")
+            else:
+                st.write("Sentiment: Neutral")
+        else:
+            st.write("Please enter a movie review.")
 
 if __name__ == "__main__":
     try:
