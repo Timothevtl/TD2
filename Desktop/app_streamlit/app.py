@@ -108,8 +108,9 @@ def information_retrieval_page():
                 st.write(f"Document ID: {index}, Similarity Score: {similarity_score:.4f}")
                 with st.expander(f"Show Document {idx+1} Text"):
                     st.text(articles[index])  # Display the full text of the document
-                st.write("Summary of the Top Matching Document:")
-                st.text(abstracts[top_index])
+                if idx == 0:
+                    st.write("Summary of the Top Matching Document:")
+                    st.text(abstracts[top_index])
                 st.write("------")
         else:
             st.write("Please enter a summary.")
