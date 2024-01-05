@@ -55,8 +55,8 @@ articles, abstracts = loadCNN()
 
 def download_and_load_model(url, model_name):
     # Path where the ZIP file will be saved
-    zip_file_path = os.path.join('..', 'model', f"{model_name}.zip")
-    model_dir_path = os.path.join('..', 'model', model_name)
+    zip_file_path = "https://raw.githubusercontent.com/Timothevtl/TD2/main/Desktop/model/my_model.zip"
+    model_dir_path = "https://raw.githubusercontent.com/Timothevtl/TD2/main/Desktop/model"
 
     if not os.path.exists(model_dir_path):
         # Download the ZIP file
