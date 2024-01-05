@@ -8,6 +8,8 @@ from io import BytesIO
 from nltk.corpus import sentiwordnet as swn
 from nltk import pos_tag, word_tokenize
 from nltk.sentiment import SentimentIntensityAnalyzer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import linear_kernel
 
 # Download necessary NLTK resources
 nltk.download('punkt')
