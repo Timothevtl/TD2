@@ -5,6 +5,7 @@ import sys
 import nltk
 import requests
 import pickle
+import sklearn
 from io import BytesIO
 from nltk.corpus import sentiwordnet as swn
 from nltk import pos_tag, word_tokenize
