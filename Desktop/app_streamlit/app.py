@@ -85,9 +85,6 @@ def movie_review_page():
 def information_retrieval_page():
     st.title("CNN Information Retrieval System")
 
-    # Load CNN data
-    articles, abstracts = loadCNN()
-
     # Create TF-IDF model
     vectorizer = TfidfVectorizer()
     tfidf_matrix = vectorizer.fit_transform(articles)
@@ -106,10 +103,13 @@ def information_retrieval_page():
 
             st.write("Top 5 matching documents (Most to Least Relevant):")
             for idx, index in enumerate(related_docs_indices[:5]):  # Display top 5 matches
+                top_index = related_docs_indices[0]
                 similarity_score = cosine_similarities[index]
                 st.write(f"Document ID: {index}, Similarity Score: {similarity_score:.4f}")
                 with st.expander(f"Show Document {idx+1} Text"):
                     st.text(articles[index])  # Display the full text of the document
+                st.write("Summary of the Top Matching Document:")
+                st.text(abstracts[top_index])
                 st.write("------")
         else:
             st.write("Please enter a summary.")
