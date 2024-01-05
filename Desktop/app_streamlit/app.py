@@ -83,7 +83,7 @@ def movie_review_page():
             st.write("Please enter a movie review.")
 
 def information_retrieval_page():
-    st.markdown("<h1 style='text-align: center; color: blue;'>CNN Information Retrieval System</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center;'>CNN Information Retrieval System</h1>", unsafe_allow_html=True)
 
     # Create TF-IDF model
     vectorizer = TfidfVectorizer()
@@ -98,7 +98,7 @@ def information_retrieval_page():
             top_index = cosine_similarities.argsort()[-1]
             similarity_score = cosine_similarities[top_index]
             
-            st.markdown(f"<p style='font-weight:bold;'>Top matching document ID: {top_index}, Similarity Score: {similarity_score:.4f}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='font-weight:bold;'>Top matching document ID: {top_index}\nSimilarity Score: {similarity_score:.4f}</p>", unsafe_allow_html=True)
             with st.expander("Show Top Document Text"):
                 st.text(articles[top_index])
             st.markdown("<h2 style='color: green;'>Summary of the Top Matching Document:</h2>", unsafe_allow_html=True)
