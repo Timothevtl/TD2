@@ -70,7 +70,7 @@ def download_and_load_model(url, model_name):
     print("Contents of the current directory:", os.listdir())
 
     # Adjust the path based on your ZIP file's structure
-    model_path = os.path.join(model_name, 'model', 'my_model')
+    model_path = os.path.join(model_name, 'model')
     print("Model path being used:", model_path)
 
     # Debugging: Check if the path exists
