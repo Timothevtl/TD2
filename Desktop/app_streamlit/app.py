@@ -110,7 +110,7 @@ def information_retrieval_page():
 
 def main():
     st.sidebar.title("Navigation")
-    options = ["Movie Review Analysis", "Other Functionality"]
+    options = ["Movie Review Analysis", "Information Retrieval System"]
     selection = st.sidebar.selectbox("Choose a page", options)
 
     if selection == "Movie Review Analysis":
