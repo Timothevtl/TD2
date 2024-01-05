@@ -1,6 +1,7 @@
 import os
 import random
 import streamlit as st
+import sys
 st.write("Python executable:", sys.executable)
 
 import nltk
