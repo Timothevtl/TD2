@@ -55,8 +55,8 @@ articles, abstracts = loadCNN()
 
 def download_and_load_model(url, model_name):
     # Path where the ZIP file will be saved
-    zip_file_path = os.path.join('..', 'model_folder', f"{model_name}.zip")
-    model_dir_path = os.path.join('..', 'model_folder', model_name)
+    zip_file_path = os.path.join('..', 'model', f"{model_name}.zip")
+    model_dir_path = os.path.join('..', 'model', model_name)
 
     if not os.path.exists(model_dir_path):
         # Download the ZIP file
