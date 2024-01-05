@@ -115,7 +115,7 @@ def main():
 
     if selection == "Movie Review Analysis":
         movie_review_page()
-    if st.sidebar.button("Information Retrieval System"):
+    if selection == "Information Retrieval System":
         information_retrieval_page()
 
 if __name__ == "__main__":
