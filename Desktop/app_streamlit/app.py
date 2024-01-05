@@ -88,10 +88,6 @@ def information_retrieval_page():
     # Load CNN data
     articles, abstracts = loadCNN()
 
-    # Limit to first 100 pairs for simplicity
-    articles = articles[:100]
-    abstracts = abstracts[:100]
-
     # Create TF-IDF model
     vectorizer = TfidfVectorizer()
     tfidf_matrix = vectorizer.fit_transform(articles)
@@ -108,13 +104,16 @@ def information_retrieval_page():
             # Rank documents based on cosine similarities
             related_docs_indices = cosine_similarities.argsort()[:-101:-1]
 
-            st.write("Top matching documents (Most to Least Relevant):")
-            for index in related_docs_indices[:5]:  # Display top 5 matches
-                st.write(f"Document {index} Snippet: {articles[index][:200]}...")  # Display the first 200 characters
-                st.write("Related Summary:", abstracts[index])  # Display the related summary
+            st.write("Top 5 matching documents (Most to Least Relevant):")
+            for idx, index in enumerate(related_docs_indices[:5]):
+                similarity_score = cosine_similarities[index]
+                st.write(f"Document ID: {index}, Similarity Score: {similarity_score:.4f}")
+                if st.button(f"Show Document {idx+1} Text"):
+                    st.text(articles[index])
                 st.write("------")
         else:
             st.write("Please enter a summary.")
+
 
 
 def main():
