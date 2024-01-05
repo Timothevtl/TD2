@@ -13,19 +13,7 @@ nltk.download('averaged_perceptron_tagger')
 nltk.download('wordnet')
 nltk.download('vader_lexicon')
 
-def identify_adverbs(tagged_sentence):
-    adverbs = [word for word, tag in tagged_sentence if tag.startswith('RB')]
-    return adverbs
-
-def get_sentiment_scores(adverb):
-    synsets = list(swn.senti_synsets(adverb))
-    if synsets:
-        pos_score = sum([synset.pos_score() for synset in synsets]) / len(synsets)
-        neg_score = sum([synset.neg_score() for synset in synsets]) / len(synsets)
-        obj_score = sum([synset.obj_score() for synset in synsets]) / len(synsets)
-        return pos_score, neg_score, obj_score
-    else:
-        return 0.0, 0.0, 1.0
+sia = SentimentIntensityAnalyzer()
 
 def classify_review(review):
     scores = sia.polarity_scores(review)
