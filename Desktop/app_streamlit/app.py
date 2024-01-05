@@ -5,7 +5,7 @@ import nltk
 from nltk.corpus import sentiwordnet as swn
 from nltk import pos_tag, word_tokenize
 
-# Import NLTK and download the "punkt" tokenizer resource
+# Download necessary NLTK resources
 nltk.download('punkt')
 nltk.download('sentiwordnet')
 nltk.download('averaged_perceptron_tagger')
@@ -15,7 +15,6 @@ def identify_adverbs(tagged_sentence):
     adverbs = [word for word, tag in tagged_sentence if tag.startswith('RB')]
     return adverbs
 
-# Function to get sentiment scores for a word
 def get_sentiment_scores(adverb):
     synsets = list(swn.senti_synsets(adverb))
     if synsets:
@@ -24,9 +23,8 @@ def get_sentiment_scores(adverb):
         obj_score = sum([synset.obj_score() for synset in synsets]) / len(synsets)
         return pos_score, neg_score, obj_score
     else:
-        return 0.0, 0.0, 1.0 
+        return 0.0, 0.0, 1.0
 
-# Function to classify a review
 def classify_review(review):
     tokens = word_tokenize(review)
     tagged_sentence = pos_tag(tokens)
@@ -38,26 +36,21 @@ def classify_review(review):
         total_pos += pos_score
         total_neg += neg_score
 
-    # Define a threshold to classify as good or bad
     threshold = 0.1
     if total_pos > total_neg + threshold:
         return "Good"
     else:
         return "Bad"
 
-        
 def analyze_movie_reviews(reviews):
     for review in reviews:
         classification = classify_review(review)
         print(f"Review: {review}")
         print(f"Classification: {classification}\n")
-        
 
-# Define the Streamlit app
-def main():
+def movie_review_page():
     st.title("Movie Review Sentiment Analysis")
     user_input = st.text_area("Enter your movie review here:")
-    # Button to analyze a random review
     if st.button("Analyze"):
         if user_input:
             sentiment = classify_review(user_input)
@@ -70,6 +63,20 @@ def main():
         else:
             st.write("Please enter a movie review.")
 
+# Placeholder for other functionalities
+def other_functionality_page():
+    st.title("Other Functionality")
+    st.write("This page is under construction.")
+
+def main():
+    st.sidebar.title("Navigation")
+    options = ["Movie Review Analysis", "Other Functionality"]
+    selection = st.sidebar.selectbox("Choose a page", options)
+
+    if selection == "Movie Review Analysis":
+        movie_review_page()
+    elif selection == "Other Functionality":
+        other_functionality_page()
 
 if __name__ == "__main__":
     main()
