@@ -36,8 +36,6 @@ def download_and_load_model(url, model_name):
 
     return tf.keras.models.load_model(model_name)
 
-# URL of the GitHub location where the model is stored
-model_url = 'https://github.com/your_username/your_repo/raw/main/my_model.zip'
 
 def loadCNN():
     # Raw URLs for the files on GitHub
@@ -71,15 +69,16 @@ articles, abstracts = loadCNN()
 
 def download_and_load_model(url, model_name):
     if not os.path.exists(model_name):
-        # Download the model file
-        r = requests.get(url, stream=True)
-        with open(f"{model_name}.zip", "wb") as f:
+        # Download the ZIP file
+        r = requests.get(url)
+        with open("model.zip", "wb") as f:
             f.write(r.content)
-        
-        # Extract the model file
-        with zipfile.ZipFile(f"{model_name}.zip", "r") as zip_ref:
-            zip_ref.extractall()
 
+        # Extract the ZIP file
+        with zipfile.ZipFile("model.zip", "r") as zip_ref:
+            zip_ref.extractall(model_name)
+
+    # Load the model
     return tf.keras.models.load_model(model_name)
 
 # URL of the GitHub location where the model is stored
@@ -101,7 +100,6 @@ def movie_review_page():
     st.title("Movie Review Sentiment Analysis")
     user_input = st.text_area("Enter your movie review here:")
 
-    # Let the user choose the analysis method
     analysis_method = st.selectbox(
         "Choose the analysis method:",
         ("VADER Lexicon", "TensorFlow Model")
@@ -120,13 +118,10 @@ def movie_review_page():
                 else:
                     st.progress(0.5)
             elif analysis_method == "TensorFlow Model":
-                # Load the TensorFlow model
+                model_url = 'your_model_url_here'  # Replace with your model's URL
                 model = download_and_load_model(model_url, 'my_model')
-                # Preprocess the input and make a prediction
-                # Note: You'll need to write a preprocess function based on how your model was trained
-                preprocessed_input = preprocess_input(user_input)
-                prediction = model.predict([preprocessed_input])
-                st.write("Model Prediction:", prediction)
+                prediction = model.predict([user_input])[0]
+                st.write("Model Prediction:", "Good" if prediction > 0.5 else "Bad")
         else:
             st.write("Please enter a movie review.")
 
