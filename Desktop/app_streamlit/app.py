@@ -54,7 +54,6 @@ def loadCNN():
 articles, abstracts = loadCNN()
 
 def download_and_load_model(url, model_name):
-    # Path where the ZIP file will be saved
     zip_file_path = f"{model_name}.zip"
 
     if not os.path.exists(model_name):
@@ -67,9 +66,19 @@ def download_and_load_model(url, model_name):
         with zipfile.ZipFile(zip_file_path, "r") as zip_ref:
             zip_ref.extractall()
 
+    # Debugging: Print the contents of the current directory after extraction
+    print("Contents of the current directory:", os.listdir())
+
     # Adjust the path based on your ZIP file's structure
-    # Assuming the structure is model/simple_model/saved_model.pb
     model_path = os.path.join(model_name, 'model', 'simple_model')
+    print("Model path being used:", model_path)
+
+    # Debugging: Check if the path exists
+    if os.path.exists(model_path):
+        print(f"Model directory {model_path} found.")
+    else:
+        print(f"Model directory {model_path} not found.")
+
     return tf.keras.models.load_model(model_path)
 
 # URL of the GitHub location where the model is stored
