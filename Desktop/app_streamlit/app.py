@@ -83,32 +83,29 @@ def movie_review_page():
             st.write("Please enter a movie review.")
 
 def information_retrieval_page():
-    st.title("CNN Information Retrieval System")
+    st.markdown("<h1 style='text-align: center; color: blue;'>CNN Information Retrieval System</h1>", unsafe_allow_html=True)
 
     # Create TF-IDF model
     vectorizer = TfidfVectorizer()
     tfidf_matrix = vectorizer.fit_transform(articles)
 
-    # User input for entering a summary query
-    user_query = st.text_area("Enter a summary to search for related document:")
+    user_query = st.text_area("Enter a summary to search for related document:", height=100)
     if st.button("Search"):
         if user_query:
-            # Process the query
             query_vec = vectorizer.transform([user_query])
-            # Calculate cosine similarities
             cosine_similarities = linear_kernel(query_vec, tfidf_matrix).flatten()
 
-            # Find the most similar document
             top_index = cosine_similarities.argsort()[-1]
             similarity_score = cosine_similarities[top_index]
             
-            st.write(f"Top matching document ID: {top_index}, Similarity Score: {similarity_score:.4f}")
+            st.markdown(f"<p style='font-weight:bold;'>Top matching document ID: {top_index}, Similarity Score: {similarity_score:.4f}</p>", unsafe_allow_html=True)
             with st.expander("Show Top Document Text"):
-                st.text(articles[top_index])  # Display the full text of the top document
-            st.write("Summary of the Top Matching Document:")
-            st.text(abstracts[top_index])  # Display the summary of the top document
+                st.text(articles[top_index])
+            st.markdown("<h2 style='color: green;'>Summary of the Top Matching Document:</h2>", unsafe_allow_html=True)
+            st.text(abstracts[top_index])
         else:
             st.write("Please enter a summary.")
+
 
 
 
