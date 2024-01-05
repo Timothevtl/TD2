@@ -54,16 +54,6 @@ def loadCNN():
 articles, abstracts = loadCNN()
 
 def download_and_load_model(url, model_name):
-    if not os.path.exists(model_name):
-        # Download the ZIP file
-        r = requests.get(url)
-        with open("model.zip", "wb") as f:
-            f.write(r.content)
-
-        # Extract the ZIP file
-        with zipfile.ZipFile("model.zip", "r") as zip_ref:
-            zip_ref.extractall(model_name)
-
     # Load the model
     return tf.keras.models.load_model(model_name)
 
