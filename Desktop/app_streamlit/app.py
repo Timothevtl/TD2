@@ -23,20 +23,6 @@ nltk.download('vader_lexicon')
 
 sia = SentimentIntensityAnalyzer()
 
-def download_and_load_model(url, model_name):
-    if not os.path.exists(model_name):
-        # Download the model file
-        r = requests.get(url, stream=True)
-        with open(f"{model_name}.zip", "wb") as f:
-            f.write(r.content)
-        
-        # Extract the model file
-        with zipfile.ZipFile(f"{model_name}.zip", "r") as zip_ref:
-            zip_ref.extractall()
-
-    return tf.keras.models.load_model(model_name)
-
-
 def loadCNN():
     # Raw URLs for the files on GitHub
     articles_url = 'https://raw.githubusercontent.com/Timothevtl/TD2/main/Desktop/data/CNNArticles'
@@ -118,7 +104,7 @@ def movie_review_page():
                 else:
                     st.progress(0.5)
             elif analysis_method == "TensorFlow Model":
-                model = download_and_load_model(model_url, 'model')
+                model = download_and_load_model(model_url, 'simple_model')
                 prediction = model.predict([user_input])[0]
                 st.write("Model Prediction:", "Good" if prediction > 0.5 else "Bad")
         else:
