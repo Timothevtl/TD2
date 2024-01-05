@@ -2,6 +2,7 @@ import os
 import random
 import streamlit as st
 import nltk
+import pickle
 from nltk.corpus import sentiwordnet as swn
 from nltk import pos_tag, word_tokenize
 from nltk.sentiment import SentimentIntensityAnalyzer
@@ -14,6 +15,26 @@ nltk.download('wordnet')
 nltk.download('vader_lexicon')
 
 sia = SentimentIntensityAnalyzer()
+
+def loadCNN():
+	file = open("../data/CNNArticles",'rb')
+	articles = pickle.load(file)
+	file = open("../data/CNNGold",'rb')
+	abstracts = pickle.load(file)
+
+	articlesCl = []  
+	for article in articles:
+		articlesCl.append(article.replace("”", "").rstrip("\n"))
+	articles = articlesCl
+	  
+	articlesCl = []  
+	for article in abstracts:
+		articlesCl.append(article.replace("”", "").rstrip("\n"))
+	abstracts = articlesCl
+    
+	return articles, abstracts
+
+articles, abstracts = loadCNN()
 
 def classify_review(review):
     scores = sia.polarity_scores(review)
@@ -45,10 +66,35 @@ def movie_review_page():
         else:
             st.write("Please enter a movie review.")
 
-# Placeholder for other functionalities
-def other_functionality_page():
-    st.title("Other Functionality")
-    st.write("This page is under construction.")
+def information_retrieval_page():
+    st.title("CNN Information Retrieval System")
+
+    # Load CNN data
+    articles, abstracts = loadCNN()
+
+    # Limit to first 100 pairs for simplicity
+    articles = articles[:100]
+    abstracts = abstracts[:100]
+
+    # Create TF-IDF model
+    vectorizer = TfidfVectorizer()
+    tfidf_matrix = vectorizer.fit_transform(articles)
+
+    # User input for entering a summary query
+    user_query = st.text_area("Enter a summary to search for related document:")
+    if st.button("Search"):
+        if user_query:
+            # Process the query
+            query_vec = vectorizer.transform([user_query])
+            # Calculate cosine similarities
+            cosine_similarities = linear_kernel(query_vec, tfidf_matrix).flatten()
+
+            # Rank documents based on cosine similarities
+            related_docs_indices = cosine_similarities.argsort()[:-101:-1]
+            st.write("Ranked Document Indices (Most to Least Relevant):")
+            st.write(related_docs_indices)
+        else:
+            st.write("Please enter a summary.")
 
 def main():
     st.sidebar.title("Navigation")
@@ -57,8 +103,8 @@ def main():
 
     if selection == "Movie Review Analysis":
         movie_review_page()
-    elif selection == "Other Functionality":
-        other_functionality_page()
+    if st.sidebar.button("Information Retrieval System"):
+        information_retrieval_page()
 
 if __name__ == "__main__":
     main()
