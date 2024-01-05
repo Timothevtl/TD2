@@ -102,14 +102,14 @@ def information_retrieval_page():
             cosine_similarities = linear_kernel(query_vec, tfidf_matrix).flatten()
 
             # Rank documents based on cosine similarities
-            related_docs_indices = cosine_similarities.argsort()[:-101:-1]
+            related_docs_indices = cosine_similarities.argsort()[:-6:-1] #only take top 5
 
             st.write("Top 5 matching documents (Most to Least Relevant):")
-            for idx, index in enumerate(related_docs_indices[:5]):
+            for idx, index in enumerate(related_docs_indices[:5]):  # Display top 5 matches
                 similarity_score = cosine_similarities[index]
                 st.write(f"Document ID: {index}, Similarity Score: {similarity_score:.4f}")
-                if st.button(f"Show Document {idx+1} Text"):
-                    st.text(articles[index])
+                with st.expander(f"Show Document {idx+1} Text"):
+                    st.text(articles[index])  # Display the full text of the document
                 st.write("------")
         else:
             st.write("Please enter a summary.")
