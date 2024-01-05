@@ -118,7 +118,7 @@ def movie_review_page():
                 else:
                     st.progress(0.5)
             elif analysis_method == "TensorFlow Model":
-                model = download_and_load_model(model_url, 'my_model')
+                model = download_and_load_model(model_url, 'model')
                 prediction = model.predict([user_input])[0]
                 st.write("Model Prediction:", "Good" if prediction > 0.5 else "Bad")
         else:
