@@ -17,22 +17,29 @@ nltk.download('vader_lexicon')
 sia = SentimentIntensityAnalyzer()
 
 def loadCNN():
-	file = open("../data/CNNArticles",'rb')
-	articles = pickle.load(file)
-	file = open("../data/CNNGold",'rb')
-	abstracts = pickle.load(file)
+    # Raw URLs for the files on GitHub
+    articles_url = 'https://raw.githubusercontent.com/Timothevtl/TD2/main/Desktop/data/CNNArticles'
+    abstracts_url = 'https://raw.githubusercontent.com/Timothevtl/TD2/main/Desktop/data/CNNGold'
 
-	articlesCl = []  
-	for article in articles:
-		articlesCl.append(article.replace("”", "").rstrip("\n"))
-	articles = articlesCl
+    # Download and load articles
+    response = requests.get(articles_url)
+    articles = pickle.load(BytesIO(response.content))
+
+    # Download and load abstracts
+    response = requests.get(abstracts_url)
+    abstracts = pickle.load(BytesIO(response.content))
+
+    articlesCl = []  
+    for article in articles:
+	articlesCl.append(article.replace("”", "").rstrip("\n"))
+    articles = articlesCl
 	  
-	articlesCl = []  
-	for article in abstracts:
-		articlesCl.append(article.replace("”", "").rstrip("\n"))
-	abstracts = articlesCl
-    
-	return articles, abstracts
+    articlesCl = []  
+    for article in abstracts:
+	articlesCl.append(article.replace("”", "").rstrip("\n"))
+    abstracts = articlesCl
+
+    return articles, abstracts
 
 articles, abstracts = loadCNN()
 
