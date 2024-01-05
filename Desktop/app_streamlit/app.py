@@ -70,7 +70,7 @@ def download_and_load_model(url, model_name):
     print("Contents of the current directory:", os.listdir())
 
     # Adjust the path based on your ZIP file's structure
-    model_path = os.path.join(model_name, 'model', 'simple_model')
+    model_path = os.path.join(model_name, 'model', 'my_model')
     print("Model path being used:", model_path)
 
     # Debugging: Check if the path exists
@@ -118,7 +118,7 @@ def movie_review_page():
                 else:
                     st.progress(0.5)
             elif analysis_method == "TensorFlow Model":
-                model = download_and_load_model(model_url, 'simple_model')
+                model = download_and_load_model(model_url, 'my_model')
                 prediction = model.predict([user_input])[0]
                 st.write("Model Prediction:", "Good" if prediction > 0.5 else "Bad")
         else:
