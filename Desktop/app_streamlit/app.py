@@ -5,7 +5,9 @@ import sys
 import nltk
 import requests
 import pickle
+import tensorflow as tf
 from io import BytesIO
+import zipfile
 from nltk.corpus import sentiwordnet as swn
 from nltk import pos_tag, word_tokenize
 from nltk.sentiment import SentimentIntensityAnalyzer
@@ -20,6 +22,22 @@ nltk.download('wordnet')
 nltk.download('vader_lexicon')
 
 sia = SentimentIntensityAnalyzer()
+
+def download_and_load_model(url, model_name):
+    if not os.path.exists(model_name):
+        # Download the model file
+        r = requests.get(url, stream=True)
+        with open(f"{model_name}.zip", "wb") as f:
+            f.write(r.content)
+        
+        # Extract the model file
+        with zipfile.ZipFile(f"{model_name}.zip", "r") as zip_ref:
+            zip_ref.extractall()
+
+    return tf.keras.models.load_model(model_name)
+
+# URL of the GitHub location where the model is stored
+model_url = 'https://github.com/your_username/your_repo/raw/main/my_model.zip'
 
 def loadCNN():
     # Raw URLs for the files on GitHub
@@ -51,6 +69,22 @@ def loadCNN():
 # Load the data
 articles, abstracts = loadCNN()
 
+def download_and_load_model(url, model_name):
+    if not os.path.exists(model_name):
+        # Download the model file
+        r = requests.get(url, stream=True)
+        with open(f"{model_name}.zip", "wb") as f:
+            f.write(r.content)
+        
+        # Extract the model file
+        with zipfile.ZipFile(f"{model_name}.zip", "r") as zip_ref:
+            zip_ref.extractall()
+
+    return tf.keras.models.load_model(model_name)
+
+# URL of the GitHub location where the model is stored
+model_url = 'https://github.com/Timothevtl/TD2/tree/main/Desktop/model/my_model.zip'
+
 def classify_review(review):
     scores = sia.polarity_scores(review)
     compound_score = scores['compound']
@@ -66,20 +100,36 @@ def classify_review(review):
 def movie_review_page():
     st.title("Movie Review Sentiment Analysis")
     user_input = st.text_area("Enter your movie review here:")
+
+    # Let the user choose the analysis method
+    analysis_method = st.selectbox(
+        "Choose the analysis method:",
+        ("VADER Lexicon", "TensorFlow Model")
+    )
+
     if st.button("Analyze"):
         if user_input:
-            sentiment, score = classify_review(user_input)
-            st.write(f"Sentiment: {sentiment}")
-            st.write("Sentiment Score:", score)
-            # Visual indicator
-            if sentiment == "Good":
-                st.progress(min(score, 1.0))
-            elif sentiment == "Bad":
-                st.progress(-min(score, 1.0))
-            else:
-                st.progress(0.5)
+            if analysis_method == "VADER Lexicon":
+                sentiment, score = classify_review(user_input)
+                st.write(f"Sentiment: {sentiment}")
+                st.write("Sentiment Score:", score)
+                if sentiment == "Good":
+                    st.progress(min(score, 1.0))
+                elif sentiment == "Bad":
+                    st.progress(-min(score, 1.0))
+                else:
+                    st.progress(0.5)
+            elif analysis_method == "TensorFlow Model":
+                # Load the TensorFlow model
+                model = download_and_load_model(model_url, 'my_model')
+                # Preprocess the input and make a prediction
+                # Note: You'll need to write a preprocess function based on how your model was trained
+                preprocessed_input = preprocess_input(user_input)
+                prediction = model.predict([preprocessed_input])
+                st.write("Model Prediction:", prediction)
         else:
             st.write("Please enter a movie review.")
+
 
 def information_retrieval_page():
     st.markdown("<h1 style='text-align: center;'>CNN Information Retrieval System</h1>", unsafe_allow_html=True)
@@ -105,9 +155,6 @@ def information_retrieval_page():
             st.text(abstracts[top_index])
         else:
             st.write("Please enter a summary.")
-
-
-
 
 
 def main():
