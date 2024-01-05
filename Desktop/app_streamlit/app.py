@@ -68,7 +68,7 @@ def download_and_load_model(url, model_name):
     return tf.keras.models.load_model(model_name)
 
 # URL of the GitHub location where the model is stored
-model_url = 'https://github.com/Timothevtl/TD2/tree/main/Desktop/model/my_model.zip'
+model_url = 'https://raw.githubusercontent.com/Timothevtl/TD2/main/Desktop/model/my_model.zip'
 
 def classify_review(review):
     scores = sia.polarity_scores(review)
