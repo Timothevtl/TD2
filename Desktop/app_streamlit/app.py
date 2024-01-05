@@ -11,6 +11,7 @@ from nltk.corpus import sentiwordnet as swn
 from nltk import pos_tag, word_tokenize
 from nltk.sentiment import SentimentIntensityAnalyzer
 from sklearn.metrics.pairwise import linear_kernel
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Download necessary NLTK resources
 nltk.download('punkt')
