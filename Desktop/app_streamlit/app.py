@@ -107,10 +107,15 @@ def information_retrieval_page():
 
             # Rank documents based on cosine similarities
             related_docs_indices = cosine_similarities.argsort()[:-101:-1]
-            st.write("Ranked Document Indices (Most to Least Relevant):")
-            st.write(related_docs_indices)
+
+            st.write("Top matching documents (Most to Least Relevant):")
+            for index in related_docs_indices[:5]:  # Display top 5 matches
+                st.write(f"Document {index} Snippet: {articles[index][:200]}...")  # Display the first 200 characters
+                st.write("Related Summary:", abstracts[index])  # Display the related summary
+                st.write("------")
         else:
             st.write("Please enter a summary.")
+
 
 def main():
     st.sidebar.title("Navigation")
