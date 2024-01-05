@@ -2,7 +2,9 @@ import os
 import random
 import streamlit as st
 import nltk
+import requests
 import pickle
+from io import BytesIO
 from nltk.corpus import sentiwordnet as swn
 from nltk import pos_tag, word_tokenize
 from nltk.sentiment import SentimentIntensityAnalyzer
@@ -25,22 +27,25 @@ def loadCNN():
     response = requests.get(articles_url)
     articles = pickle.load(BytesIO(response.content))
 
+    # Clean articles
+    articlesCl = []  
+    for article in articles:
+        articlesCl.append(article.replace("”", "").rstrip("\n"))
+    articles = articlesCl
+
     # Download and load abstracts
     response = requests.get(abstracts_url)
     abstracts = pickle.load(BytesIO(response.content))
 
-    articlesCl = []  
-    for article in articles:
-	articlesCl.append(article.replace("”", "").rstrip("\n"))
-    articles = articlesCl
-	  
+    # Clean abstracts
     articlesCl = []  
     for article in abstracts:
-	articlesCl.append(article.replace("”", "").rstrip("\n"))
+        articlesCl.append(article.replace("”", "").rstrip("\n"))
     abstracts = articlesCl
 
     return articles, abstracts
 
+# Load the data
 articles, abstracts = loadCNN()
 
 def classify_review(review):
